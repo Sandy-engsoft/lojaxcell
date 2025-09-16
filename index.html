@@ -1,142 +1,857 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xcell</title>
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xcell</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variáveis de cores */
+        :root {
+            --color-primary: #7e22ce; /* Violeta principal */
+            --color-primary-light: #a855f7; /* Violeta claro */
+            --color-primary-dark: #581c87; /* Violeta escuro */
+            --color-secondary: #000000; /* Preto */
+            --color-secondary-light: #1f2937; /* Preto claro */
+            --color-accent: #f5f5f5; /* Cinza claro */
+            --color-text: #333333; /* Texto escuro */
+            --color-light: #ffffff; /* Branco */
+            --color-border: #e5e7eb; /* Cinza para bordas */
+        }
+
+        /* Reset e estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--color-text);
+            line-height: 1.6;
+            background-color: var(--color-light);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header suave */
+        header {
+            background-color: rgba(0, 0, 0, 0.9);
+            color: var(--color-light);
+            padding: 0.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(126, 34, 206, 0.2);
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--color-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary-light);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary-dark) 100%);
+            color: var(--color-light);
+            padding: 5rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%237e22ce' fill-opacity='0.2' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,218.7C672,224,768,160,864,138.7C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: var(--color-primary);
+            color: var(--color-light);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(126, 34, 206, 0.3);
+        }
+
+        /* Categorias */
+        .categorias {
+            padding: 4rem 0;
+            background-color: var(--color-accent);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: var(--color-secondary);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--color-primary);
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+
+        .categorias-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .categoria-card {
+            background-color: var(--color-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .categoria-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(126, 34, 206, 0.2);
+        }
+
+        .categoria-icon {
+            font-size: 3rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .categoria-card h3 {
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .categoria-card p {
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Produtos */
+        .produtos {
+            padding: 5rem 0;
+        }
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .produto-card {
+            background-color: var(--color-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(126, 34, 206, 0.2);
+        }
+
+        .produto-img {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(45deg, var(--color-accent), var(--color-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .produto-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(126, 34, 206, 0.1), rgba(126, 34, 206, 0.05));
+        }
+
+        .produto-info {
+            padding: 1.8rem;
+        }
+
+        .produto-info h3 {
+            color: var(--color-secondary);
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .produto-info p {
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .produto-preco {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Sobre */
+        .sobre {
+            padding: 5rem 0;
+            background-color: var(--color-accent);
+        }
+
+        .sobre-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .sobre-text h2 {
+            color: var(--color-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .sobre-text p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .sobre-img {
+            position: relative;
+        }
+
+        .sobre-img-inner {
+            height: 400px;
+            background: linear-gradient(45deg, var(--color-primary-dark), var(--color-primary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-light);
+            font-size: 1.5rem;
+            box-shadow: 0 15px 30px rgba(126, 34, 206, 0.3);
+        }
+
+        /* Vantagens */
+        .vantagens {
+            padding: 5rem 0;
+        }
+
+        .vantagens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .vantagem-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 12px;
+            background-color: var(--color-light);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .vantagem-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .vantagem-icon {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .vantagem-card h3 {
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Contato */
+        .contato {
+            padding: 5rem 0;
+            background: linear-gradient(to right, var(--color-secondary-light), var(--color-secondary));
+            color: var(--color-light);
+        }
+
+        .contato-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--color-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--color-secondary);
+            color: var(--color-light);
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links h3 {
+            margin-bottom: 1.2rem;
+            color: var(--color-primary-light);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--color-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary-light);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--color-primary);
+            color: var(--color-light);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--color-light);
+            color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                backdrop-filter: blur(10px);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .sobre-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const { useState } = React;
-
-    // Ícones inline simplificados
-    const SearchIcon = () => (
-      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
-      </svg>
-    );
-    const MenuIcon = () => (
-      <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    );
-    const ShoppingCartIcon = () => (
-      <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 7h14l-2-7M5 21a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2z"/>
-      </svg>
-    );
-    const PhoneIcon = () => (
-      <svg className="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h2l3.6 7.59a1 1 0 01-.22 1.09l-1.44 1.44a16 16 0 006.18 6.18l1.44-1.44a1 1 0 011.09-.22L19 19v2a1 1 0 01-1 1 18 18 0 01-16-16 1 1 0 011-1z"/>
-      </svg>
-    );
-    const MailIcon = () => (
-      <svg className="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m0 8V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2h14a2 2 0 002-2z"/>
-      </svg>
-    );
-    const MapPinIcon = () => (
-      <svg className="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 2c4.418 0 8 3.582 8 8 0 4.418-4 9-8 14-4-5-8-9.582-8-14 0-4.418 3.582-8 8-8z"/>
-      </svg>
-    );
-
-    const CapinhasNoAtacado = () => {
-      const [menuOpen, setMenuOpen] = useState(false);
-
-      return (
-        <div className="min-h-screen bg-white">
-          {/* Header */}
-          <header className="bg-white shadow-md sticky top-0 z-50">
-            <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-blue-600">Xcell</h1>
-
-              <nav className="hidden md:flex items-center space-x-8">
-                <a href="#inicio" className="text-gray-700 hover:text-blue-600 font-medium">Início</a>
-                <a href="#produtos" className="text-gray-700 hover:text-blue-600 font-medium">Produtos</a>
-                <a href="#categorias" className="text-gray-700 hover:text-blue-600 font-medium">Categorias</a>
-                <a href="#sobre" className="text-gray-700 hover:text-blue-600 font-medium">Sobre Nós</a>
-                <a href="#contato" className="text-gray-700 hover:text-blue-600 font-medium">Contato</a>
-              </nav>
-
-              <div className="flex items-center space-x-4">
-                <div className="hidden md:flex items-center bg-gray-100 rounded-full px-3 py-2">
-                  <SearchIcon />
-                  <input type="text" placeholder="Buscar produtos..." className="bg-transparent border-none outline-none px-2 text-sm"/>
-                </div>
-                <div className="relative">
-                  <ShoppingCartIcon />
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">3</span>
-                </div>
-                <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
-                  <MenuIcon />
-                </button>
-              </div>
-            </div>
-
-            {menuOpen && (
-              <div className="md:hidden mt-4 pb-4 px-4">
-                <div className="flex items-center bg-gray-100 rounded-full px-3 py-2 mb-4">
-                  <SearchIcon />
-                  <input type="text" placeholder="Buscar produtos..." className="bg-transparent border-none outline-none px-2 text-sm w-full"/>
-                </div>
-                <nav className="flex flex-col space-y-3">
-                  <a href="#inicio" className="text-gray-700 hover:text-blue-600 font-medium">Início</a>
-                  <a href="#produtos" className="text-gray-700 hover:text-blue-600 font-medium">Produtos</a>
-                  <a href="#categorias" className="text-gray-700 hover:text-blue-600 font-medium">Categorias</a>
-                  <a href="#sobre" className="text-gray-700 hover:text-blue-600 font-medium">Sobre Nós</a>
-                  <a href="#contato" className="text-gray-700 hover:text-blue-600 font-medium">Contato</a>
-                </nav>
-              </div>
-            )}
-          </header>
-
-          {/* Hero */}
-          <section id="inicio" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Xcell</h2>
-            <p className="text-xl mb-8">Melhores preços para revendedores e atacadistas</p>
-            <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto">
-              <p className="text-lg mb-4">Preços especiais para compras acima de 100 unidades</p>
-              <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
-                Solicitar Catálogo
-              </button>
-            </div>
-          </section>
-
-          {/* Categorias */}
-          <section id="categorias" className="py-16 bg-gray-50">
-            <div className="container mx-auto px-4 text-center">
-              <h2 className="text-3xl font-bold mb-12">Categorias em Destaque</h2>
-              <p>Aqui você pode colocar imagens de categorias</p>
-            </div>
-          </section>
-
-          {/* Produtos */}
-          <section id="produtos" className="py-16">
-            <div className="container mx-auto px-4 text-center">
-              <h2 className="text-3xl font-bold mb-12">Produtos em Destaque</h2>
-              <p>Aqui você pode colocar seus produtos com preços e descrições</p>
-            </div>
-          </section>
-
-          {/* Footer */}
-          <footer id="contato" className="bg-gray-900 text-white py-12">
-            <div className="container mx-auto px-4 text-center">
-              <p>© 2025 Xcell. Todos os direitos reservados.</p>
-            </div>
-          </footer>
+    <!-- Header -->
+    <header>
+        <div class="container header-inner">
+            <a href="#" class="logo">
+                <i class="fas fa-mobile-alt"></i> Xcell
+            </a>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#categorias">Categorias</a></li>
+                <li><a href="#produtos">Produtos</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
         </div>
-      );
-    };
+    </header>
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<CapinhasNoAtacado />);
-  </script>
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="container hero-content">
+            <h1>Xcell</h1>
+            <p>Encontre as melhores capinhas para celular com preços competitivos e qualidade superior. Atendemos revendedores e atacadistas.</p>
+            <a href="#produtos" class="btn">Ver Produtos</a>
+        </div>
+    </section>
+
+    <!-- Categorias -->
+    <section id="categorias" class="categorias">
+        <div class="container">
+            <h2 class="section-title">Nossas Categorias</h2>
+            <div class="categorias-grid">
+                <div class="categoria-card">
+                    <div class="categoria-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Capinhas Antishock</h3>
+                    <p>Proteção máxima contra quedas e impactos com design moderno e materiais de alta resistência.</p>
+                    <a href="#produtos" class="btn">Ver Produtos</a>
+                </div>
+
+                <div class="categoria-card">
+                    <div class="categoria-icon">
+                        <i class="fas fa-tint-slash"></i>
+                    </div>
+                    <h3>Capinhas à Prova D'água</h3>
+                    <p>Proteção completa contra água e líquidos para aventuras ao ar livre e uso no dia a dia.</p>
+                    <a href="#produtos" class="btn">Ver Produtos</a>
+                </div>
+
+                <div class="categoria-card">
+                    <div class="categoria-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Capinhas Personalizadas</h3>
+                    <p>Design exclusivo com possibilidade de customização para sua marca ou estilo pessoal.</p>
+                    <a href="#produtos" class="btn">Ver Produtos</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Produtos -->
+    <section id="produtos" class="produtos">
+        <div class="container">
+            <h2 class="section-title">Produtos em Destaque</h2>
+            <div class="produtos-grid">
+                <div class="produto-card">
+                    <div class="produto-img">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="produto-info">
+                        <h3>Capinha Transparente</h3>
+                        <p>Proteção cristalina que mantém a beleza original do seu aparelho.</p>
+                        <div class="produto-preco">A partir de R$ 8,90</div>
+                        <a href="#contato" class="btn">Solicitar Orçamento</a>
+                    </div>
+                </div>
+
+                <div class="produto-card">
+                    <div class="produto-img">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="produto-info">
+                        <h3>Capinha Antishock</h3>
+                        <p>Proteção máxima contra quedas e impactos com design moderno.</p>
+                        <div class="produto-preco">A partir de R$ 12,90</div>
+                        <a href="#contato" class="btn">Solicitar Orçamento</a>
+                    </div>
+                </div>
+
+                <div class="produto-card">
+                    <div class="produto-img">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="produto-info">
+                        <h3>Capinha Personalizada</h3>
+                        <p>Design exclusivo com possibilidade de customização para sua marca.</p>
+                        <div class="produto-preco">A partir de R$ 15,90</div>
+                        <a href="#contato" class="btn">Solicitar Orçamento</a>
+                    </div>
+                </div>
+
+                <div class="produto-card">
+                    <div class="produto-img">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="produto-info">
+                        <h3>Capinha à Prova D'água</h3>
+                        <p>Proteção completa contra água e líquidos para aventuras ao ar livre.</p>
+                        <div class="produto-preco">A partir de R$ 24,90</div>
+                        <a href="#contato" class="btn">Solicitar Orçamento</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="sobre">
+        <div class="container">
+            <h2 class="section-title">Sobre a Xcell</h2>
+            <div class="sobre-content">
+                <div class="sobre-text">
+                    <h2>Excelência em Proteção</h2>
+                    <p>A Xcell é especializada em assistencia tecnica e ofere produtos de alta qualidade com os melhores preços do mercado.</p>
+                    <p>Nossas capinhas são fabricadas com materiais de primeira linha, garantindo durabilidade, proteção e estilo para todos os modelos de smartphones.</p>
+                    <p>Trabalhamos com revendedores e atacadistas em todo o Brasil, fornecendo soluções personalizadas e atendimento diferenciado.</p>
+                    <a href="#contato" class="btn">Fale Conosco</a>
+                </div>
+                <div class="sobre-img">
+                    <div class="sobre-img-inner">
+                        <i class="fas fa-building"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vantagens -->
+    <section class="vantagens">
+        <div class="container">
+            <h2 class="section-title">Por que Escolher a Xcell?</h2>
+            <div class="vantagens-grid">
+                <div class="vantagem-card">
+                    <div class="vantagem-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Entrega Rápida</h3>
+                    <p>Entregamos em todo o Brasil com prazos curtos e confiáveis.</p>
+                </div>
+
+                <div class="vantagem-card">
+                    <div class="vantagem-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3>Qualidade Garantida</h3>
+                    <p>Produtos testados e aprovados com garantia de qualidade.</p>
+                </div>
+
+                <div class="vantagem-card">
+                    <div class="vantagem-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3>Preços Competitivos</h3>
+                    <p>Melhores preços do mercado para atacado e revenda.</p>
+                </div>
+
+                <div class="vantagem-card">
+                    <div class="vantagem-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Suporte Personalizado</h3>
+                    <p>Atendimento especializado para cada cliente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contato" class="contato">
+        <div class="container">
+            <h2 class="section-title">Entre em Contato</h2>
+            <div class="contato-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" required placeholder="Seu nome completo">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="empresa">Empresa</label>
+                        <input type="text" id="empresa" name="empresa" placeholder="Nome da sua empresa">
+                    </div>
+                    <div class="form-group">
+                        <label for="mensagem">Mensagem</label>
+                        <textarea id="mensagem" name="mensagem" required placeholder="Como podemos ajudar?"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Enviar Mensagem</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <i class="fas fa-mobile-alt"></i> Xcell
+                    </div>
+                    <p>Capinhas de qualidade no atacado para revendedores e distribuidores.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#inicio">Início</a></li>
+                        <li><a href="#categorias">Categorias</a></li>
+                        <li><a href="#produtos">Produtos</a></li>
+                        <li><a href="#sobre">Sobre</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000 - São Paulo</li>
+                        <li><i class="fas fa-phone"></i> (11) 3333-9999</li>
+                        <li><i class="fas fa-envelope"></i> contato@xcell.com.br</li>
+                        <li><i class="fas fa-clock"></i> Seg-Sex: 9h-18h | Sáb: 9h-13h</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Xcell - Capinhas no Atacado. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.padding = '0.5rem 0';
+                header.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                header.style.padding = '0.8rem 0';
+                header.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value,
+                empresa: document.getElementById('empresa').value,
+                mensagem: document.getElementById('mensagem').value
+            };
+
+            // Aqui você pode adicionar a lógica para enviar os dados
+            console.log('Formulário enviado:', formData);
+            alert('Obrigado pelo seu contato! Retornaremos em breve.');
+            contactForm.reset();
+        });
+
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Fechar menu mobile se estiver aberto
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
